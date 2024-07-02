@@ -44,9 +44,9 @@ const startApolloServer = (app, httpServer) => __awaiter(void 0, void 0, void 0,
         resolvers: resolover_1.resolvers,
         plugins: [(0, apollo_server_core_1.ApolloServerPluginDrainHttpServer)({ httpServer })],
     });
-    // if(mongoose.connection.readyState !== 1){
-    //   await connectDatabase();
-    // }
+    if (mongoose_1.default.connection.readyState !== 1) {
+        yield connectDatabase();
+    }
     yield server.start();
     console.log("---server started");
     server.applyMiddleware({ app });
