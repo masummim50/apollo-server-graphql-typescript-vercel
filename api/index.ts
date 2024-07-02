@@ -41,9 +41,9 @@ const startApolloServer = async (app: Application, httpServer:http.Server) => {
   });
 
 
-  if(mongoose.connection.readyState !== 1){
-    await connectDatabase();
-  }
+  // if(mongoose.connection.readyState !== 1){
+  //   await connectDatabase();
+  // }
   await server.start();
   console.log("---server started")
   server.applyMiddleware({ app } as any);
