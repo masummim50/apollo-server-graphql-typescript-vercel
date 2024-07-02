@@ -4,22 +4,34 @@ import http from "http";
 import express, { Application } from "express";
 import cors from "cors";
 
+import mongoose from "mongoose";
+import { typeDefs } from "../src/graphql/typedefs/typedef";
+import { resolvers } from "../src/graphql/resolvers/resolover";
+
+
+
+
 const app: Application = express();
 app.use(cors());
 app.use(express.json());
 const httpServer = http.createServer(app);
 
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
+// const typeDefs = gql`
+//   type Query {
+//     hello: String
+//   }
+// `;
 
-const resolvers = {
-  Query: {
-    hello: () => "world",
-  },
-};
+// const resolvers = {
+//   Query: {
+//     hello: () => "world",
+//   },
+// };
+
+const connectDatabase = async()=> {
+  await mongoose.connect("mongodb://127.0.0.1:27017/blog-database")
+  .then(()=> console.log("database connected: "))
+}
 
 const startApolloServer = async (app: Application, httpServer:http.Server) => {
   const server = new ApolloServer({
@@ -28,9 +40,15 @@ const startApolloServer = async (app: Application, httpServer:http.Server) => {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
+
+  if(mongoose.connection.readyState !== 1){
+    await connectDatabase();
+  }
   await server.start();
+  console.log("---server started")
   server.applyMiddleware({ app } as any);
 };
+
 
 startApolloServer(app, httpServer);
 
