@@ -5,8 +5,8 @@ import { jwtHelpers } from "../../helpers/jwtHelpers";
 import bcrypt from "bcrypt";
 import { userModel } from "../user/user.model";
 import { postModel } from "./post.model";
-import { DecodedUser } from "../..";
 import { GraphQLError } from "graphql";
+
 
 const signUpMutation = async (parent: any, args: any, context: any) => {
   console.log("jwt secret key: ", envVariables.jwtSecretKey);
@@ -21,7 +21,7 @@ const signUpMutation = async (parent: any, args: any, context: any) => {
 const addPostMutation = async (
   parent: any,
   args: any,
-  context: DecodedUser
+  context: any
 ) => {
   console.log("context: ", context);
   const { title, content } = args;
