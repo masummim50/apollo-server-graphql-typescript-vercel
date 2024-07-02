@@ -27,7 +27,7 @@ const httpServer = http_1.default.createServer(app);
 const connectDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default
-            .connect(process.env.DATABASE_URL)
+            .connect(process.env.DATABASE_URL, { serverSelectionTimeoutMS: 60000 })
             .then(() => console.log("database connected: "));
     }
     catch (error) {
@@ -51,6 +51,7 @@ const startApolloServer = (app, httpServer) => __awaiter(void 0, void 0, void 0,
         typeDefs: typedef_1.typeDefs,
         resolvers: resolover_1.resolvers,
         introspection: true,
+        cache: "bounded",
         plugins: [(0, apollo_server_core_1.ApolloServerPluginDrainHttpServer)({ httpServer })],
     });
     if (mongoose_1.default.connection.readyState !== 1) {

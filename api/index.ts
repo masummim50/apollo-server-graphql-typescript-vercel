@@ -16,7 +16,7 @@ const httpServer = http.createServer(app);
 const connectDatabase = async () => {
   try {
     await mongoose
-      .connect(process.env.DATABASE_URL as string)
+      .connect(process.env.DATABASE_URL as string, {serverSelectionTimeoutMS:60000})
       .then(() => console.log("database connected: "));
   } catch (error) {
     console.log("Database connection establishing error:", error);
@@ -42,6 +42,7 @@ const startApolloServer = async (app: Application, httpServer: http.Server) => {
     typeDefs,
     resolvers,
     introspection: true,
+    cache: "bounded",
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
