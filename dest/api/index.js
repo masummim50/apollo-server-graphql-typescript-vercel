@@ -31,8 +31,20 @@ const connectDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
             .then(() => console.log("database connected: "));
     }
     catch (error) {
-        console.log(error);
+        console.log("Database connection establishing error:", error);
+        setTimeout(connectDatabase, 5000);
     }
+});
+mongoose_1.default.connection.on("connected", () => {
+    console.log("Mongoose connected to DB");
+});
+mongoose_1.default.connection.on("error", (err) => {
+    console.error(`Mongoose connection error: ${err}`);
+    mongoose_1.default.disconnect();
+});
+mongoose_1.default.connection.on("disconnected", () => {
+    console.log("Mongoose disconnected. Reconnecting...");
+    connectDatabase();
 });
 const startApolloServer = (app, httpServer) => __awaiter(void 0, void 0, void 0, function* () {
     const server = new apollo_server_express_1.ApolloServer({

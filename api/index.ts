@@ -19,9 +19,23 @@ const connectDatabase = async () => {
       .connect(process.env.DATABASE_URL as string)
       .then(() => console.log("database connected: "));
   } catch (error) {
-    console.log(error);
+    console.log("Database connection establishing error:", error);
+    setTimeout(connectDatabase, 5000); 
   }
 };
+mongoose.connection.on("connected", () => {
+  console.log("Mongoose connected to DB");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.error(`Mongoose connection error: ${err}`);
+  mongoose.disconnect();
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.log("Mongoose disconnected. Reconnecting...");
+  connectDatabase();
+});
 
 const startApolloServer = async (app: Application, httpServer: http.Server) => {
   const server = new ApolloServer({
