@@ -25,8 +25,14 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const httpServer = http_1.default.createServer(app);
 const connectDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield mongoose_1.default.connect(process.env.DATABASE_URL)
-        .then(() => console.log("database connected: "));
+    try {
+        yield mongoose_1.default
+            .connect(process.env.DATABASE_URL)
+            .then(() => console.log("database connected: "));
+    }
+    catch (error) {
+        console.log(error);
+    }
 });
 const startApolloServer = (app, httpServer) => __awaiter(void 0, void 0, void 0, function* () {
     const server = new apollo_server_express_1.ApolloServer({
