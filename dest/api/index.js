@@ -32,7 +32,6 @@ const connectDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     catch (error) {
         console.log("Database connection establishing error:", error);
-        setTimeout(connectDatabase, 5000);
     }
 });
 mongoose_1.default.connection.on("connected", () => {
@@ -46,6 +45,7 @@ mongoose_1.default.connection.on("disconnected", () => {
     console.log("Mongoose disconnected. Reconnecting...");
     connectDatabase();
 });
+connectDatabase();
 const startApolloServer = (app, httpServer) => __awaiter(void 0, void 0, void 0, function* () {
     const server = new apollo_server_express_1.ApolloServer({
         typeDefs: typedef_1.typeDefs,

@@ -14,13 +14,13 @@ app.use(express.json());
 const httpServer = http.createServer(app);
 
 const connectDatabase = async () => {
+  
   try {
     await mongoose
       .connect(process.env.DATABASE_URL as string, {serverSelectionTimeoutMS:60000})
       .then(() => console.log("database connected: "));
   } catch (error) {
     console.log("Database connection establishing error:", error);
-    setTimeout(connectDatabase, 5000); 
   }
 };
 mongoose.connection.on("connected", () => {
@@ -36,7 +36,7 @@ mongoose.connection.on("disconnected", () => {
   console.log("Mongoose disconnected. Reconnecting...");
   connectDatabase();
 });
-
+connectDatabase();
 const startApolloServer = async (app: Application, httpServer: http.Server) => {
   const server = new ApolloServer({
     typeDefs,
