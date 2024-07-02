@@ -24,16 +24,6 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const httpServer = http_1.default.createServer(app);
-// const typeDefs = gql`
-//   type Query {
-//     hello: String
-//   }
-// `;
-// const resolvers = {
-//   Query: {
-//     hello: () => "world",
-//   },
-// };
 const connectDatabase = () => __awaiter(void 0, void 0, void 0, function* () {
     yield mongoose_1.default.connect(process.env.DATABASE_URL)
         .then(() => console.log("database connected: "));
@@ -42,6 +32,7 @@ const startApolloServer = (app, httpServer) => __awaiter(void 0, void 0, void 0,
     const server = new apollo_server_express_1.ApolloServer({
         typeDefs: typedef_1.typeDefs,
         resolvers: resolover_1.resolvers,
+        introspection: true,
         plugins: [(0, apollo_server_core_1.ApolloServerPluginDrainHttpServer)({ httpServer })],
     });
     if (mongoose_1.default.connection.readyState !== 1) {

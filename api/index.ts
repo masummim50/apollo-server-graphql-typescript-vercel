@@ -16,17 +16,6 @@ app.use(cors());
 app.use(express.json());
 const httpServer = http.createServer(app);
 
-// const typeDefs = gql`
-//   type Query {
-//     hello: String
-//   }
-// `;
-
-// const resolvers = {
-//   Query: {
-//     hello: () => "world",
-//   },
-// };
 
 const connectDatabase = async()=> {
   await mongoose.connect(process.env.DATABASE_URL as string)
@@ -37,6 +26,7 @@ const startApolloServer = async (app: Application, httpServer:http.Server) => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
+    introspection: true,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
