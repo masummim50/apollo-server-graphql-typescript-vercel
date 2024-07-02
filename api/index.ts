@@ -29,7 +29,7 @@ const httpServer = http.createServer(app);
 // };
 
 const connectDatabase = async()=> {
-  await mongoose.connect("mongodb://127.0.0.1:27017/blog-database")
+  await mongoose.connect(process.env.DATABASE_URL as string)
   .then(()=> console.log("database connected: "))
 }
 
