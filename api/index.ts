@@ -44,6 +44,12 @@ const startApolloServer = async (app: Application, httpServer: http.Server) => {
     introspection: true,
     cache: "bounded",
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context:async ({ req, res }) => {
+      console.log("mongoose connect state: ", mongoose.connection.readyState)
+      if(mongoose.connection.readyState !== 1){
+        await connectDatabase();
+      }
+    },
   });
 
   if (mongoose.connection.readyState !== 1) {

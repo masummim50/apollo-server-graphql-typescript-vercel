@@ -53,6 +53,12 @@ const startApolloServer = (app, httpServer) => __awaiter(void 0, void 0, void 0,
         introspection: true,
         cache: "bounded",
         plugins: [(0, apollo_server_core_1.ApolloServerPluginDrainHttpServer)({ httpServer })],
+        context: ({ req, res }) => __awaiter(void 0, void 0, void 0, function* () {
+            console.log("mongoose connect state: ", mongoose_1.default.connection.readyState);
+            if (mongoose_1.default.connection.readyState !== 1) {
+                yield connectDatabase();
+            }
+        }),
     });
     if (mongoose_1.default.connection.readyState !== 1) {
         yield connectDatabase();
